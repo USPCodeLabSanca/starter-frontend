@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { login as loginAction } from '../../redux/actions/auth';
+import { signup as signupAction, setToken as setTokenAction } from '../../redux/actions/auth';
 import { Routes } from '../../router';
 import LoadingButton from '../../components/loading-button';
 
@@ -23,6 +23,7 @@ const style = {
 function Login () {
 	const [isLoggingIn, setIsLoggingIn] = React.useState(false);
 
+	const nameRef = React.useRef();
 	const emailRef = React.useRef();
 	const passwordRef = React.useRef();
 	const confirmPasswordRef = React.useRef();
@@ -31,10 +32,12 @@ function Login () {
 
 	async function submit (event) {
 		event.preventDefault();
+		const name = nameRef.current.value.trim();
 		const email = emailRef.current.value.trim().toLowerCase();
 		const password = passwordRef.current.value;
 		const confirmPassword = confirmPasswordRef.current.value;
 
+		if (!name) return toast.error('Você deve fornecer um nome');
 		if (!email) return toast.error('Você deve fornecer um e-mail');
 		if (!password) return toast.error('Você deve fornecer uma senha');
 		if (!confirmPassword) return toast.error('Você deve fornecer uma confirmação de senha');
@@ -43,9 +46,10 @@ function Login () {
 
 		try {
 			setIsLoggingIn(true);
-			const action = await loginAction(email, password);
+			const action = await signupAction(name, email, password);
+			dispatch(setTokenAction('token')); // TODO - remove this if proper backend is placed
 			dispatch(action);
-		} catch (e) {} finally {
+		} catch (e) { console.error(e); } finally {
 			setIsLoggingIn(false);
 		}
 	}
@@ -55,6 +59,7 @@ function Login () {
 			<div className={style.card}>
 				<h1 className={style.title}>Criar conta</h1>
 				<form className={style.form} onSubmit={submit}>
+					<input className={style.input} ref={nameRef} type='text' placeholder='Seu nome' />
 					<input className={style.input} ref={emailRef} type='email' placeholder='E-mail' />
 					<input className={style.input} ref={passwordRef} type='password' placeholder='Senha' />
 					<input className={style.input} ref={confirmPasswordRef} type='password' placeholder='Confirmar Senha' />

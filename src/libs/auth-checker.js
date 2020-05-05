@@ -18,7 +18,8 @@ export function withAuth (Component) {
 
 		if (!isLoggedIn(token, user)) {
 			toast.error('Sua sessão expirou. Por favor, faça login novamente');
-			history.push(Routes.login);
+			// setTimeout is here to prevent changing state at a render function
+			setTimeout(() => history.push(Routes.login));
 			return null;
 		}
 
@@ -33,7 +34,8 @@ export function withNoAuth (Component) {
 		const history = useHistory();
 
 		if (isLoggedIn(token, user)) {
-			history.replace(Routes.home);
+			// setTimeout is here to prevent changing state at a render function
+			setTimeout(() => history.replace(Routes.home));
 			return null;
 		}
 

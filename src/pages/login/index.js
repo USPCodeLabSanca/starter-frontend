@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { login as loginAction } from '../../redux/actions/auth';
+import { login as loginAction, setToken as setTokenAction } from '../../redux/actions/auth';
 import { Routes } from '../../router';
 import LoadingButton from '../../components/loading-button';
 
@@ -40,8 +40,9 @@ function Login () {
 		try {
 			setIsLoggingIn(true);
 			const action = await loginAction(email, password);
+			dispatch(setTokenAction('token')); // TODO - remove this if proper backend is placed
 			dispatch(action);
-		} catch (e) {} finally {
+		} catch (e) { console.error(e) } finally {
 			setIsLoggingIn(false);
 		}
 	}
@@ -51,8 +52,20 @@ function Login () {
 			<div className={style.card}>
 				<h1 className={style.title}>Login</h1>
 				<form className={style.form} onSubmit={submit}>
-					<input className={style.input} ref={emailRef} type='email' placeholder='E-mail' />
-					<input className={style.input} ref={passwordRef} type='password' placeholder='Senha' />
+					<input
+						className={style.input}
+						ref={emailRef}
+						type='email'
+						placeholder='E-mail'
+						autoComplete='email'
+					/>
+					<input
+						className={style.input}
+						ref={passwordRef}
+						type='password'
+						placeholder='Senha'
+						autoComplete='current-password'
+					/>
 					<LoadingButton
 						isLoading={isLoggingIn}
 						className={style.button}

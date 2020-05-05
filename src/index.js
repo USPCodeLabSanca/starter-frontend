@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 
 import Content from './router';
-import store from './redux/store';
+import { store, persistor } from './redux/store';
 import { initializeAPI } from './api/base-api';
 
 import baseURL from './constants/api-url';
@@ -26,7 +26,7 @@ initializeAPI({
 function App () {
 	return (
 		<Provider store={store}>
-			<PersistGate loading={null} persistor={store}>
+			<PersistGate loading={null} persistor={persistor}>
 				<BrowserRouter>
 					<ToastContainer hideProgressBar />
 					<Content />

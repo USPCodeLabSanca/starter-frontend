@@ -1,11 +1,11 @@
 import API from './base-api';
-import { withCustomError } from './error-message';
+// import { withCustomError } from './error-message';
+
+// TODO - add actual API routes
 
 const Handlers = {
-	login: withCustomError(
-		(username, password) => API.post(`/login`, { username, password }),
-		{ 401: 'Credenciais inválidas' }
-	),
+	login: (email, password) => API.post(`/auth/login`, { email, password }),
+	signup: (name, email, password) => API.post(`/auth/signup`, { name, email, password }),
 }
 
 export default Handlers;
