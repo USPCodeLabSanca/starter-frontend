@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 
 import { login as loginAction, setToken as setTokenAction } from '../../redux/actions/auth';
 import { Routes } from '../../router';
-import LoadingButton from '../../components/loading-button';
+import LoadingButton from '../../components/reusable/loading-button';
 
+/** Tailwind styles. */
 const style = {
 	main: 'h-full flex justify-center items-center p-4',
 	card: 'rounded-lg p-4 bg-white shadow-lg w-full max-w-md flex flex-col items-center',
@@ -21,28 +22,38 @@ const style = {
 }
 
 function Login () {
+	/**
+	 * This state is updated when the user submits the login for. The statee is used
+	 * to display a spinner on the button while the request is happening
+	 */
 	const [isLoggingIn, setIsLoggingIn] = React.useState(false);
 
+	// React refs used to read the inputs's values.
 	const emailRef = React.useRef();
 	const passwordRef = React.useRef();
 
 	const dispatch = useDispatch();
 
+	/** Function called when the user submits the form */
 	async function submit (event) {
-		event.preventDefault();
+		event.preventDefault();	// Prevents the page from reloading.
+
 		const email = emailRef.current.value.trim().toLowerCase();
 		const password = passwordRef.current.value;
 
+		// Error treatment.
 		if (!email) return toast.error('Você deve fornecer um e-mail');
 		if (!password) return toast.error('Você deve fornecer uma senha');
 		if (password.length < 6) return toast.error('Sua senha deve ter no mínimo 6 caracteres');
 
 		try {
+			// Show spinner
 			setIsLoggingIn(true);
 			const action = await loginAction(email, password);
 			dispatch(setTokenAction('token')); // TODO - remove this if proper backend is placed
 			dispatch(action);
 		} catch (e) { console.error(e) } finally {
+			// Hide spinner
 			setIsLoggingIn(false);
 		}
 	}

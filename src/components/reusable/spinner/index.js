@@ -2,6 +2,15 @@ import React from 'react';
 
 import './style.css';
 
+/**
+ * This is a simple spinner used to indicate to the user that something is loading.
+ *
+ * Any prop not described below will be forwarded to the `svg` element.
+ * @param { Object } props
+ * @param { 'large' | 'medium' | 'small' | 'extra-small' } [props.size]
+ * @param { number } [props.strokeWidth] The width (in pixels) of the spinner line.
+ * @param { string } [props.color] The color of the spinner. Any CSS color can go here, including Hexadecimals.
+ */
 function Spinner ({ size = 'medium', strokeWidth = 4, color = 'black', ...props }) {
 	const sizeInPixels = {
 		large: 40,

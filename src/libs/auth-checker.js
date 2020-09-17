@@ -6,10 +6,24 @@ import { useHistory } from 'react-router-dom';
 
 import { Routes } from '../router';
 
+/**
+ * @argument { Object } user
+ * @argument { string } token
+ */
 function isLoggedIn (user, token) {
 	return Boolean(user && token);
 }
 
+/**
+ * This is a higher order function for a component. It will get information through Redux
+ * on which user is currently logged in. If the user is logged in, it will render
+ * the component normaly, passing the `user` as a prop. If the user is not loged in,
+ * it will redirect the user to the login page.
+ *
+ * This functions is the opposite of the `withNoAuth` function defined below.
+ * These functions are supposed to be used inside the router to "lock" some pages
+ * that should only be seen by logged in (or not logged in) users.
+ */
 export function withAuth (Component) {
 	return (props) => {
 		const token = useSelector(state => state.auth && state.auth.token);
@@ -27,6 +41,16 @@ export function withAuth (Component) {
 	};
 }
 
+
+/**
+ * This is a higher order function for a component. It will get information through Redux
+ * on which user is currently logged in. If the user is logged in, it will redirect the user
+ * to thir home page. If the user is not loged in, it will render the component normaly.
+ *
+ * This functions is the opposite of the `withAuth` function defined abore.
+ * These functions are supposed to be used inside the router to "lock" some pages
+ * that should only be seen by logged in (or not logged in) users.
+ */
 export function withNoAuth (Component) {
 	return (props) => {
 		const token = useSelector(state => state.auth && state.auth.token);

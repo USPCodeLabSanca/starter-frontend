@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import { signup as signupAction, setToken as setTokenAction } from '../../redux/actions/auth';
 import { Routes } from '../../router';
-import LoadingButton from '../../components/loading-button';
+import LoadingButton from '../../components/reusable/loading-button';
 
 const style = {
 	main: 'h-full flex justify-center items-center p-4',
@@ -21,8 +21,13 @@ const style = {
 }
 
 function Login () {
+	/**
+	 * This state is updated when the user submits the login for. The statee is used
+	 * to display a spinner on the button while the request is happening
+	 */
 	const [isLoggingIn, setIsLoggingIn] = React.useState(false);
 
+	// React refs used to read the inputs's values.
 	const nameRef = React.useRef();
 	const emailRef = React.useRef();
 	const passwordRef = React.useRef();
@@ -30,13 +35,16 @@ function Login () {
 
 	const dispatch = useDispatch();
 
+	/** Function called when the user submits the form */
 	async function submit (event) {
-		event.preventDefault();
+		event.preventDefault();	// Prevents the page from reloading.
+
 		const name = nameRef.current.value.trim();
 		const email = emailRef.current.value.trim().toLowerCase();
 		const password = passwordRef.current.value;
 		const confirmPassword = confirmPasswordRef.current.value;
 
+		// Error treatment.
 		if (!name) return toast.error('Você deve fornecer um nome');
 		if (!email) return toast.error('Você deve fornecer um e-mail');
 		if (!password) return toast.error('Você deve fornecer uma senha');
@@ -45,11 +53,13 @@ function Login () {
 		if (password !== confirmPassword) return toast.error('A senha e a confirmação de senha estão diferentes');
 
 		try {
+			// Show spinner
 			setIsLoggingIn(true);
 			const action = await signupAction(name, email, password);
 			dispatch(setTokenAction('token')); // TODO - remove this if proper backend is placed
 			dispatch(action);
 		} catch (e) { console.error(e); } finally {
+			// Hide spinner
 			setIsLoggingIn(false);
 		}
 	}

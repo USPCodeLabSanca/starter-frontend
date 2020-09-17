@@ -57,7 +57,7 @@ function initializeAPI (config) {
 @type { import('axios').AxiosInstance } */
 const APIProtectorProxy = new Proxy({}, {
   get (target, prop) {
-    if (!globalAPI) throw new Error('Cannot access API before it\'s initialization');
+    if (!globalAPI) throw new Error('Cannot access API before it\'s initialization. Please call `initializeAPI()` before using this import.');
     else return globalAPI[prop];
   }
 })
