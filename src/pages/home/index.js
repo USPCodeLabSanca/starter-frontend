@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Navbar from '../../components/layout/navbar';
+import { Routes } from '../../router';
 
 import { logout as logoutAction } from '../../redux/actions/auth';
 
@@ -26,7 +27,7 @@ function Home ({ user }) {
 
 	function logout () {
 		// Redirects the user.
-		history.push('/login');
+		history.push(Routes.login);
 
 		// Updates the redux state to log the user out.
 		dispatch(logoutAction());
