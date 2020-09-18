@@ -1,4 +1,4 @@
-# Nextjs, styled-components, typescript and some build niceness template
+# Codelab's front-end template
 
 This a template using **USP Codelab São Carlos**'s stack. It contains the following major libraries:
 
